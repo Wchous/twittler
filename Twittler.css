@@ -1,0 +1,33 @@
+h1 {
+  text-align: left;
+  display:block
+  text-align: center;
+}
+
+body  {
+  background-color: #73a6e2;
+} 
+
+#tweets {
+  text-align: center;
+  font-family: Lato, sans-serif
+} 
+
+div {
+  background-color: #c2efec;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px; 
+  border-style: solid;
+  border-width: 5px;
+  width: 400px;
+}
+
+button {
+     border-bottom:1px solid #444; 
+}
+
+span {
+     width: 5px;
+     display:inline-block
+}

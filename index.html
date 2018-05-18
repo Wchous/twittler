@@ -3,25 +3,82 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link rel='stylesheet' href='twittler.css'>
   </head>
   <body>
+    <h1>Welcome to Twittler</h1>
+    <h2><u>User Timelines</u></h2>
+    <ul id ="users"></u1> 
+    <h2><u>Twittler Feed</u></h2>
+    <ul id ="tweets"></ul>
     <script>
-
       $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
-
-        var index = streams.home.length - 1;
+        $allUsers = $('#users');
+        for (var i = 0; i < users.length; i++) {
+          var $user = $('<button class="user"></button>');
+          $user.text(users[i]);
+          $allUsers.prepend($user);
+          $allUsers.prepend('<span> </span>');
+        }
+      })
+      var $body = $('#tweets');
+      //$body.html('');
+      var index = streams.home.length - 1;
+      var newTweetIndex = index;
+      var timelineMode = false; 
+      var originalTweets = function () { 
         while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
+          appendTweets(index)
           index -= 1;
         }
-
+      }
+      var appendTweets = function (tweetIndex)  {
+        var tweet = streams.home[tweetIndex]
+        var $tweet = $('<div class= '+ tweet.user + '>'+ tweet.user +' ' + tweet.message +' <br> ' + tweet.created_at +' </div>')
+        $tweet.appendTo($body)
+      } 
+      
+      var newTweets = function () {
+        newTweetsGenerate = setInterval(function ()  {
+          for (var c = newTweetIndex+1; c < streams.home.length-1; c++)  {
+            appendTweets(c); 
+            newTweetIndex = c; 
+          }
+        },10000)
+      }
+      
+      var showUserTimeline = function(UsersToHide,UserToShow)  {
+          clearInterval(newTweetsGenerate)
+          $(UserToShow).show()
+          $(UsersToHide).hide()
+          if (!timelineMode)  {  
+            var home = $("<div class='home'><b>Click Here to Return to Home Page</b></div>");
+            home.prependTo($body)
+          }
+          timelineMode = true;   
+      }
+      $(document).ready(function(){
+        originalTweets(); 
+        newTweets();
+        $('.user').on('click', function() {
+          var username = $(this).text();
+          for (var i in streams.users)  {
+            if (i !== username)  {
+                  var iClass = "." + i
+                  var usernameClass = "." + username 
+                  showUserTimeline(iClass,usernameClass)
+            }
+              
+          }
+        })
       });
-
+      $(document).on('click', '.home', function() {
+          $('div').show()
+          $('.home').remove();
+          timelineMode = false;
+          //originalTweets(); 
+          newTweets(); 
+      })
     </script>
   </body>
 </html>
